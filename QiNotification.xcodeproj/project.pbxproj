@@ -18,6 +18,7 @@
 		147FEE1B2136A6F200256B50 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 147FEE1A2136A6F200256B50 /* Assets.xcassets */; };
 		147FEE1E2136A6F200256B50 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 147FEE1C2136A6F200256B50 /* LaunchScreen.storyboard */; };
 		147FEE212136A6F200256B50 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 147FEE202136A6F200256B50 /* main.m */; };
+		14FD3E0021523F9000ED657C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 14FD3E0221523F9000ED657C /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,6 +38,7 @@
 		147FEE1F2136A6F200256B50 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		147FEE202136A6F200256B50 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		14A15706213803AF0028E871 /* QiNotification.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QiNotification.entitlements; sourceTree = "<group>"; };
+		14FD3E0121523F9000ED657C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,6 +86,7 @@
 				147FEE1C2136A6F200256B50 /* LaunchScreen.storyboard */,
 				147FEE1F2136A6F200256B50 /* Info.plist */,
 				147FEE202136A6F200256B50 /* main.m */,
+				14FD3E0221523F9000ED657C /* Localizable.strings */,
 			);
 			path = QiNotification;
 			sourceTree = "<group>";
@@ -154,6 +157,7 @@
 				147FEE1E2136A6F200256B50 /* LaunchScreen.storyboard in Resources */,
 				14275F2021411DF100AB6EBE /* sound02.wav in Resources */,
 				14275F1C21411C9F00AB6EBE /* logo_img_02@3x.png in Resources */,
+				14FD3E0021523F9000ED657C /* Localizable.strings in Resources */,
 				14275F1F21411DF100AB6EBE /* sound01.wav in Resources */,
 				14275F1821411C3700AB6EBE /* logo_img_01@2x.png in Resources */,
 				14275F1B21411C9F00AB6EBE /* logo_img_02@2x.png in Resources */,
@@ -185,6 +189,14 @@
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
+		14FD3E0221523F9000ED657C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				14FD3E0121523F9000ED657C /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -192,6 +204,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -250,6 +263,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -305,14 +319,14 @@
 				CODE_SIGN_ENTITLEMENTS = QiNotification/QiNotification.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8ZX24TX624;
+				DEVELOPMENT_TEAM = RR72T9X762;
 				INFOPLIST_FILE = QiNotification/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.qihoo.smarthome.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.webteam.pushsdk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -327,14 +341,14 @@
 				CODE_SIGN_ENTITLEMENTS = QiNotification/QiNotification.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 8ZX24TX624;
+				DEVELOPMENT_TEAM = RR72T9X762;
 				INFOPLIST_FILE = QiNotification/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = net.qihoo.smarthome.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.webteam.pushsdk;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";
