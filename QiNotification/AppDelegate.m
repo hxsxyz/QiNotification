@@ -130,7 +130,7 @@ API_AVAILABLE(ios(10.0)){
     if (userInfo) {
         NSLog(@"app位于前台通知(willPresentNotification:):%@", userInfo);
     }
-    completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound|UNNotificationPresentationOptionAlert);;
+    completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound|UNNotificationPresentationOptionAlert);
 }
 
 //  iO>=10: 点击通知进入App时触发（杀死/切到后台唤起）
