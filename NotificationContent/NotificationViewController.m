@@ -64,9 +64,14 @@
     self.label.text = notification.request.content.title;
     self.subLabel.text = [NSString stringWithFormat:@"%@ [ContentExtension modified]", notification.request.content.subtitle];
     
-    NSData *data = notification.request.content.userInfo[@"image"];
-    UIImage *image = [UIImage imageWithData:data];
-    [self.imageView setImage:image];
+    // 提取附件
+    UNNotificationAttachment * attachment = notification.request.content.attachments.firstObject;
+    if ([attachment.URL startAccessingSecurityScopedResource]) {
+        
+        NSData *imageData = [NSData dataWithContentsOfURL:attachment.URL];
+        [self.imageView setImage:[UIImage imageWithData:imageData]];
+        [attachment.URL stopAccessingSecurityScopedResource];
+    }
 }
 
 - (void)didReceiveNotificationResponse:(UNNotificationResponse *)response completionHandler:(void (^)(UNNotificationContentExtensionResponseOption))completion {

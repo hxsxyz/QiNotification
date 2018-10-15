@@ -83,7 +83,10 @@
             self.bestAttemptContent.userInfo = dict;
             
             NSError *attachmentError = nil;
-            attachment = [UNNotificationAttachment attachmentWithIdentifier:@"QiShareCategoryIdentifier" URL:localURL options:nil error:&attachmentError];
+            attachment = [UNNotificationAttachment attachmentWithIdentifier:@"QiShareCategoryIdentifier"
+                                                                        URL:localURL
+                                                                    options:nil
+                                                                      error:&attachmentError];
             if (attachmentError) {
                 NSLog(@"%@", attachmentError.localizedDescription);
             }
