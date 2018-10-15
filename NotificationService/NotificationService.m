@@ -25,8 +25,7 @@
     //// Modify the notification content here...
     self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [ServiceExtension modified]", self.bestAttemptContent.title];
     
-    // 注：为通知下拉手动展开时，可添加多个事件
-    // UNNotificationActionOptions包含三个值UNNotificationActionOptionAuthenticationRequired、UNNotificationActionOptionDestructive、UNNotificationActionOptionForeground
+    // 设置UNNotificationAction
     UNNotificationAction * actionA  =[UNNotificationAction actionWithIdentifier:@"ActionA" title:@"A_Required" options:UNNotificationActionOptionAuthenticationRequired];
     UNNotificationAction * actionB = [UNNotificationAction actionWithIdentifier:@"ActionB" title:@"B_Destructive" options:UNNotificationActionOptionDestructive];
     UNNotificationAction * actionC = [UNNotificationAction actionWithIdentifier:@"ActionC" title:@"C_Foreground" options:UNNotificationActionOptionForeground];
@@ -35,25 +34,25 @@
                                                                                           options:UNNotificationActionOptionDestructive
                                                                              textInputButtonTitle:@"Send"
                                                                              textInputPlaceholder:@"input some words here ..."];
-    NSMutableArray *actionArr = [[NSMutableArray alloc] initWithObjects:actionA, actionB, actionC, actionD, nil];
-    if (actionArr.count) {
-        UNNotificationCategory * notficationCategory = [UNNotificationCategory categoryWithIdentifier:@"QiShareCategoryIdentifier"
-                                                                                              actions:actionArr
-                                                                                    intentIdentifiers:@[@"ActionA",@"ActionB",@"ActionC",@"ActionD"]
-                                                                                              options:UNNotificationCategoryOptionCustomDismissAction];
-        [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithObject:notficationCategory]];
-    }
+    NSArray *actionArr = [[NSArray alloc] initWithObjects:actionA, actionB, actionC, actionD, nil];
+    NSArray *identifierArr = [[NSArray alloc] initWithObjects:@"ActionA", @"ActionB", @"ActionC", @"ActionD", nil];
+    UNNotificationCategory * notficationCategory = [UNNotificationCategory categoryWithIdentifier:@"QiShareCategoryIdentifier"
+                                                                                          actions:actionArr
+                                                                                intentIdentifiers:identifierArr
+                                                                                          options:UNNotificationCategoryOptionCustomDismissAction];
+    [[UNUserNotificationCenter currentNotificationCenter] setNotificationCategories:[NSSet setWithObject:notficationCategory]];
     
-    
-    // 注：1.通知扩展功能须在aps串中设置字段"mutable-content":1； 2.多媒体的字段可以与appServer协议制定；
+    // 设置categoryIdentifier
     self.bestAttemptContent.categoryIdentifier = @"QiShareCategoryIdentifier";
     
+    // 加载网络请求
     NSDictionary *userInfo =  self.bestAttemptContent.userInfo;
-    NSString *mediaUrl = [NSString stringWithFormat:@"%@", userInfo[@"media"][@"url"]];
+    NSString *mediaUrl = userInfo[@"media"][@"url"];
+    NSString *mediaType = userInfo[@"media"][@"type"];
     if (!mediaUrl.length) {
         self.contentHandler(self.bestAttemptContent);
     } else {
-        [self loadAttachmentForUrlString:mediaUrl withType:userInfo[@"media"][@"type"] completionHandle:^(UNNotificationAttachment *attach) {
+        [self loadAttachmentForUrlString:mediaUrl withType:mediaType completionHandle:^(UNNotificationAttachment *attach) {
             
             if (attach) {
                 self.bestAttemptContent.attachments = [NSArray arrayWithObject:attach];
@@ -67,14 +66,13 @@
 {
     __block UNNotificationAttachment *attachment = nil;
     NSURL *attachmentURL = [NSURL URLWithString:urlStr];
-    NSString *fileExt = [self fileExtensionForMediaType:type];
+    NSString *fileExt = [self getfileExtWithMediaType:type];
     
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session downloadTaskWithURL:attachmentURL completionHandler:^(NSURL *temporaryFileLocation, NSURLResponse *response, NSError *error) {
-        if (error != nil) {
+        if (error) {
             NSLog(@"加载多媒体失败 %@", error.localizedDescription);
         } else {
-            
             NSFileManager *fileManager = [NSFileManager defaultManager];
             NSURL *localURL = [NSURL fileURLWithPath:[temporaryFileLocation.path stringByAppendingString:fileExt]];
             [fileManager moveItemAtURL:temporaryFileLocation toURL:localURL error:&error];
@@ -85,7 +83,7 @@
             self.bestAttemptContent.userInfo = dict;
             
             NSError *attachmentError = nil;
-            attachment = [UNNotificationAttachment attachmentWithIdentifier:@"" URL:localURL options:nil error:&attachmentError];
+            attachment = [UNNotificationAttachment attachmentWithIdentifier:@"QiShareCategoryIdentifier" URL:localURL options:nil error:&attachmentError];
             if (attachmentError) {
                 NSLog(@"%@", attachmentError.localizedDescription);
             }
@@ -94,18 +92,18 @@
     }] resume];
 }
 
-- (NSString *)fileExtensionForMediaType:(NSString *)type {
-    NSString *ext = type;
-    if ([type isEqualToString:@"image"]) {
-        ext = @"jpg";
+- (NSString *)getfileExtWithMediaType:(NSString *)mediaType {
+    NSString *fileExt = mediaType;
+    if ([mediaType isEqualToString:@"image"]) {
+        fileExt = @"jpg";
     }
-    if ([type isEqualToString:@"video"]) {
-        ext = @"mp4";
+    if ([mediaType isEqualToString:@"video"]) {
+        fileExt = @"mp4";
     }
-    if ([type isEqualToString:@"audio"]) {
-        ext = @"mp3";
+    if ([mediaType isEqualToString:@"audio"]) {
+        fileExt = @"mp3";
     }
-    return [@"." stringByAppendingString:ext];
+    return [@"." stringByAppendingString:fileExt];
 }
 
 - (void)serviceExtensionTimeWillExpire {

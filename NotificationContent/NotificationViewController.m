@@ -74,20 +74,19 @@
     [self.hintLabel setText:[NSString stringWithFormat:@"触发了%@", response.actionIdentifier]];
     if ([response.actionIdentifier isEqualToString:@"ActionA"]) {
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            completion(UNNotificationContentExtensionResponseOptionDismiss);
-        });
-        
     } else if([response.actionIdentifier isEqualToString:@"ActionB"]) {
 
     } else if([response.actionIdentifier isEqualToString:@"ActionC"]) {
 
     }  else if([response.actionIdentifier isEqualToString:@"ActionD"]) {
-
+        UNTextInputNotificationResponse *textInputResponse = (UNTextInputNotificationResponse *)response;
+        [self.hintLabel setText:[NSString stringWithFormat:@"ActionD输入了--%@", textInputResponse.userText]];
     } else {
-        completion(UNNotificationContentExtensionResponseOptionDismiss);
+        
     }
-    completion(UNNotificationContentExtensionResponseOptionDoNotDismiss);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        completion(UNNotificationContentExtensionResponseOptionDismiss);
+    });
 }
 
 @end
