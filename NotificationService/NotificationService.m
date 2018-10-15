@@ -93,6 +93,7 @@
 }
 
 - (NSString *)getfileExtWithMediaType:(NSString *)mediaType {
+    
     NSString *fileExt = mediaType;
     if ([mediaType isEqualToString:@"image"]) {
         fileExt = @"jpg";
