@@ -28,7 +28,9 @@
     [_window setRootViewController:nav];
     [_window makeKeyAndVisible];
     
+    ////注册本地推送通知（具体操作在ViewController中）
     //[self registerLocalNotification];
+    // 注册远程推送通知
     [self registerRemoteNotifications];
     
     return YES;
@@ -64,25 +66,22 @@
                 NSLog(@"request authorization failed!");
             }
         }];
-    } else if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+    } else {
         UIUserNotificationType types = (UIUserNotificationTypeAlert | UIUserNotificationTypeSound | UIUserNotificationTypeBadge);
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:types categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
-    } else {
-        UIRemoteNotificationType apn_type = (UIRemoteNotificationType)(UIRemoteNotificationTypeAlert |
-                                                                       UIRemoteNotificationTypeSound |
-                                                                       UIRemoteNotificationTypeBadge);
-        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:apn_type];
     }
 }
 
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
+    
     NSLog(@"didRegisterUserNotificationSettings");
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+    
     NSLog(@"app收到本地推送(didReceiveLocalNotification:):%@", notification.userInfo);
 }
 
@@ -94,9 +93,13 @@
     NSLog(@"DeviceToken:%@\n", token);
 }
 
-// 注：iOS10以上，如果不使用UNUserNotificationCenter，将走此回调方法
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    
+    NSLog(@"didFailToRegisterForRemoteNotificationsWithError: %@", error.description);
+}
+
+// 注：iOS10以上如果不使用UNUserNotificationCenter时，也将走此回调方法
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     // iOS6及以下系统
     if (userInfo) {
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {// app位于前台通知
@@ -107,23 +110,23 @@
     }
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler NS_AVAILABLE_IOS(7_0)
-{
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler NS_AVAILABLE_IOS(7_0) {
     // iOS7及以上系统
     if (userInfo) {
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {// app位于前台通知
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
             NSLog(@"app位于前台通知(didReceiveRemoteNotification:fetchCompletionHandler:):%@", userInfo);
-        } else {// 切到后台唤起
+        } else {
             NSLog(@"app位于后台通知(didReceiveRemoteNotification:fetchCompletionHandler:):%@", userInfo);
         }
     }
     completionHandler(UIBackgroundFetchResultNewData);
 }
 
+
 #pragma mark - iOS>=10 中收到推送消息
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
-//  iOS>=10: App在前台获取到通知
+
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 API_AVAILABLE(ios(10.0)){
     NSDictionary * userInfo = notification.request.content.userInfo;
@@ -133,7 +136,6 @@ API_AVAILABLE(ios(10.0)){
     completionHandler(UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionSound|UNNotificationPresentationOptionAlert);
 }
 
-//  iO>=10: 点击通知进入App时触发（杀死/切到后台唤起）
 - (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
 API_AVAILABLE(ios(10.0)){
     NSDictionary * userInfo = response.notification.request.content.userInfo;
@@ -142,6 +144,7 @@ API_AVAILABLE(ios(10.0)){
     }
     completionHandler();
 }
+
 #endif
 
 

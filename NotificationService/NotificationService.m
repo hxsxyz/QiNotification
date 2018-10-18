@@ -22,7 +22,7 @@
     self.contentHandler = contentHandler;
     self.bestAttemptContent = [request.content mutableCopy];
     
-    //// Modify the notification content here...
+    // Modify the notification content here...
     self.bestAttemptContent.title = [NSString stringWithFormat:@"%@ [ServiceExtension modified]", self.bestAttemptContent.title];
     
     // 设置UNNotificationAction
@@ -62,8 +62,8 @@
     }
 }
 
-- (void)loadAttachmentForUrlString:(NSString *)urlStr withType:(NSString *)type completionHandle:(void(^)(UNNotificationAttachment *attach))completionHandler
-{
+- (void)loadAttachmentForUrlString:(NSString *)urlStr withType:(NSString *)type completionHandle:(void(^)(UNNotificationAttachment *attach))completionHandler {
+    
     __block UNNotificationAttachment *attachment = nil;
     NSURL *attachmentURL = [NSURL URLWithString:urlStr];
     NSString *fileExt = [self getfileExtWithMediaType:type];
